@@ -312,7 +312,7 @@ class ViewController: UIViewController {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        var nextView: GameOverViewController = segue.destinationViewController as GameOverViewController
+        var nextView: GameOverViewController = segue.destinationViewController as! GameOverViewController
         nextView.score = self.score
     }
 
