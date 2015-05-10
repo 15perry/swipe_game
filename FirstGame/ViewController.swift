@@ -10,11 +10,17 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    let screen = UIScreen.mainScreen().bounds // gets the constraints of the screen
+    var transform : CGAffineTransform? // sets up the transform
+    
     var timer = NSTimer()
+    var timer2 = NSTimer()
     var lastColor = 0
     var currentColor = 5
+    var counted = 0
     
-    var score = 0
+    var counter:Double = 0
+    var score:Int = 0
     var difficulty = 3.0
     
     let BLUE = 0
@@ -23,24 +29,33 @@ class ViewController: UIViewController {
     let ORANGE = 3
     
     var backgroundView = UIView()
+    var behindThing = UIView()
+    
+    var color : UIColor?
     
     var arrow = UIImage(named: "arrow")
     
     override func viewDidLoad() {
-        super.viewDidLoad()
         
+        super.viewDidLoad()
         firstChangeColor()
+        counting()
         //changeColor()
         resetTimer()
+        timer2 = NSTimer.scheduledTimerWithTimeInterval(1/10, target: self, selector: Selector("counting"), userInfo: nil, repeats: true)
     }
     
     @IBOutlet var mainView: UIView!
+    
+    
+    @IBOutlet weak var CounterLabel: UILabel!
+    
     
     @IBAction func swipeUp(sender: UISwipeGestureRecognizer) {
         
         if (currentColor == BLUE) {
             println("CORRECT")
-            score++
+            scoreIncrease()
             
             changeColor()
             resetTimer()
@@ -54,7 +69,7 @@ class ViewController: UIViewController {
         
         if (currentColor == GREEN) {
             println("CORRECT")
-            score++
+            scoreIncrease()
             
             changeColor()
             resetTimer()
@@ -63,12 +78,16 @@ class ViewController: UIViewController {
         }
         
     }
+    
+    
+    
+    
     
     @IBAction func swipeLeft(sender: UISwipeGestureRecognizer) {
         
         if (currentColor == RED) {
             println("CORRECT")
-            score++
+            scoreIncrease()
             
             changeColor()
             resetTimer()
@@ -78,11 +97,13 @@ class ViewController: UIViewController {
         
     }
     
+    
+    
     @IBAction func swipeRight(sender: UISwipeGestureRecognizer) {
         
         if (currentColor == ORANGE) {
             println("CORRECT")
-            score++
+            scoreIncrease()
             
             changeColor()
             resetTimer()
@@ -92,9 +113,61 @@ class ViewController: UIViewController {
 
     }
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    func scoreIncrease(){
+        score = score + counted
+    }
+    
+    
+    
+    
+    func counting(){
+        
+        
+        
+        var CounterLabel = UILabel()
+        CounterLabel.text = "\(counted)"
+        CounterLabel.textColor = UIColor.whiteColor()
+        CounterLabel.font = UIFont(name: "Helvetica Bold", size: 30)
+        behindThing.addSubview(CounterLabel)
+        behindThing.bringSubviewToFront(CounterLabel)
+        CounterLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        
+        
+        
+        behindThing = UIView(frame: CGRectMake(0, 0, 30, 30))
+        behindThing.backgroundColor = color
+        mainView.addSubview(behindThing)
+        
+        
+        counter += 1;
+        counted = Int(5*(difficulty - counter/10) / difficulty)
+        
+        
+       
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     func changeColor() {
         var c = Int(arc4random_uniform(4)) // picks a random number 0-3
-        var color : UIColor
         
         //make sure that it does not choose the same color twice in a row
         if (c == lastColor) {
@@ -207,19 +280,36 @@ class ViewController: UIViewController {
         lastColor = c
     }
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     func gameLost() {
         println("GAME OVER")
         self.performSegueWithIdentifier("game_over", sender: self)
     }
     
+    
+    
+    
+    
+    
+    
     func resetTimer() {
         
         switch score {
-        case 0...5:
+        case 0...1000:
             difficulty = 3.0
-        case 6...10:
+        case 1000...2000:
             difficulty = 2.0
-        case 11...15:
+        case 2000...3000:
             difficulty = 1.0
         default:
             difficulty = 0.75
@@ -227,7 +317,16 @@ class ViewController: UIViewController {
         
         timer.invalidate()
         timer = NSTimer.scheduledTimerWithTimeInterval(difficulty, target: self, selector: Selector("gameLost"), userInfo: nil, repeats: false)
+        counter = 0
     }
+    
+    
+    
+    
+    
+    
+    
+    
     
     func firstChangeColor() {
         var c = Int(arc4random_uniform(4)) // picks a random number 0-3

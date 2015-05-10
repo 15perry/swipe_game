@@ -19,11 +19,6 @@ class MainMenuViewController: UIViewController {
     let play_red = UIImage(named: "play_red") as UIImage?
     let play_orange = UIImage(named: "play_orange") as UIImage?
     
-    let instructions_green = UIImage(named: "instructions_green") as UIImage?
-    let instructions_blue = UIImage(named: "instructions_blue") as UIImage?
-    let instructions_red = UIImage(named: "instructions_red") as UIImage?
-    let instructions_orange = UIImage(named: "instructions_orange") as UIImage?
-    
     var timer = NSTimer()
     var count = 0
     
